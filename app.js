@@ -62,27 +62,18 @@ function leerDatosElemento(elemento){
         titulo: elemento.querySelector('h3').textContent,
         precio: elemento.querySelector('.precio').textContent,
         cantidad: 1,
-        id: elemento.querySelector('a').getAttribute('data-id')
+        id: elemento.querySelector('a').getAttribute('data-id'),
     }
-    insertarCarrito(infoElemento)
-    //comparar(infoElemento)
-   
+    guardarProducto(infoElemento);
 }
-
-// function comparar (elemento){
-//     let datos = document.getElementsByTagName("tr")
-//     for(let i = 1, celda =  new Array(); i < datos.length; i++){
-//          celda = datos[i].cells[1];
-//         console.log(celda)
-//      }
-
-// }
-
-
-function insertarCarrito(elemento){
-    console.log(lista);
-    const row = document.createElement("tr");
-    row.innerHTML = `
+const Productos = [];
+function guardarProducto(elemento){
+    const producto = {nombre: elemento.titulo, cantidad: elemento.cantidad};
+    const indice = Productos.findIndex(p => p.nombre === elemento.titulo); 
+    if(indice ===-1){
+        Productos.push(producto); 
+        const row = document.createElement("tr");
+        row.innerHTML = `
     
         <td>
             <img src = "${elemento.imagen}" width = 50 />
@@ -97,7 +88,7 @@ function insertarCarrito(elemento){
         </td>
         
         <td>
-           ${elemento.cantidad + 2}
+           ${elemento.cantidad}
         </td>
 
         <td>
@@ -109,8 +100,23 @@ function insertarCarrito(elemento){
         </td>
     `;
     lista.appendChild(row);
-    
+    }
+      else{
+        console.log("estoy aqui")
+        Productos[indice].cantidad++;
+        const rows = document.querySelectorAll("tr");
+        rows.forEach((row) => {
+        if (row.cells[2].textContent === elemento.titulo) {
+          row.cells[3].textContent = Productos[indice].cantidad;
+        }
+      });
+    }
+  console.log(Productos);
 }
+
+
+
+
 
 function eliminarElemento(e){
     e.preventDefault();
