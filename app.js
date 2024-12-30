@@ -68,7 +68,7 @@ function leerDatosElemento(elemento){
 }
 const Productos = [];
 function guardarProducto(elemento){
-    const producto = {nombre: elemento.titulo, cantidad: elemento.cantidad};
+    const producto = {nombre: elemento.titulo, cantidad: elemento.cantidad, precio: elemento.precio};
     const indice = Productos.findIndex(p => p.nombre === elemento.titulo); 
     if(indice ===-1){
         Productos.push(producto); 
@@ -101,23 +101,26 @@ function guardarProducto(elemento){
     `;
     lista.appendChild(row);
     }
-      else{
-        console.log("estoy aqui")
-        Productos[indice].cantidad++;
-        const rows = document.querySelectorAll("tr");
-        rows.forEach((row) => {
-        if (row.cells[2].textContent === elemento.titulo) {
-          row.cells[3].textContent = Productos[indice].cantidad;
+     
+
+else {
+    // Si el producto ya existe, aumentamos la cantidad
+    Productos[indice].cantidad++;
+
+    // Buscamos todas las filas de la tabla para actualizar la cantidad y el precio total
+    const rows = document.querySelectorAll("tr");
+    rows.forEach((row) => {
+        const nombreProducto = row.cells[1].textContent; // Suponemos que el nombre está en la segunda celda (índice 1)
+        // Verificamos si el nombre de la fila coincide con el nombre del producto
+        if (nombreProducto.trim() === elemento.titulo.trim()) {
+            // Actualizar la cantidad (suponiendo que la cantidad está en la cuarta celda, índice 3)
+            row.cells[3].textContent = Productos[indice].cantidad;
+            // Actualizar el precio total (suponiendo que el precio total está en la quinta celda, índice 4)
+            row.cells[4].textContent = Productos[indice].cantidad * Productos[indice].precio;
         }
-      });
-    }
-  console.log(Productos);
+    });
 }
-
-
-
-
-
+}
 function eliminarElemento(e){
     e.preventDefault();
     let elemento,
